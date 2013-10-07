@@ -44,7 +44,7 @@ abstract class FinSet[T] protected () {
   */
   def <=(other:FinSet[T]):Boolean = {
     var includes = true
-    for (el <- this.toList) if (!other.contains(el)) includes = false
+    for (elem <- this.toList) if (!other.contains(elem)) includes = false
     includes
   }
   
@@ -85,23 +85,37 @@ class ListSet[T] private (l: List[T]) extends FinSet[T] {
     case y :: t => if (x == y) l else y :: add(x, t)
   }
     
-  val toList = 
-    List[T]() // replace this line with your implementation  
+  val toList = elems
 
-  def +(x: T) = 
-    this // replace this line with your implementation  
+  def +(x: T) = new ListSet[T](this.add(x, elems))
 
-  def U(other:FinSet[T]) = 
-    this // replace this line with your implementation
+  def U(other:FinSet[T]) = {
+    var newList = elems
+    for (e <- other.toList) newList = this.add(e, newList)
+    new ListSet[T](newList)
+  }
   
-  def ^(other:FinSet[T]) = 
-    this // replace this line with your implementation
+  def ^(other:FinSet[T]) = {
+    var newList = List[T]()
+    for (e <- other.toList) if (elems.contains(e)) newList = e :: newList
+    new ListSet[T](newList)
+  }
   
-  def \(other:FinSet[T]) = 
-    this // replace this line with your implementation
+  def \(other:FinSet[T]) = {
+    var newList = List[T]()
+    for(e <- elems) if (!other.contains(e)) newList = e :: newList
+    new ListSet[T](newList)
+  }
 
-  def contains(x:T) = 
-    false // replace this line with your implementation
+  def contains(x:T) = {
+    def rCon(x:T, l:List[T]):Boolean = {
+      l match {
+        case Nil => false
+        case h :: t => if (h == x) true else rCon(x, t)
+      }
+    }
+    rCon(x, elems)
+  }
 }
 
 
