@@ -3,7 +3,7 @@
 //
 // Homework 3
 //
-// Name: <your name here>
+// Name: Alexander Starr
 //
 //==================================================
 
@@ -42,9 +42,11 @@ abstract class FinSet[T] protected () {
   /* given a set other, it returns true if and only if this is included
      in other, i.e., iff every element of this is an element of other
   */
-  def <=(other:FinSet[T]):Boolean = 
-    false // replace this line with your implementation
-    
+  def <=(other:FinSet[T]):Boolean = {
+    var includes = true
+    for (el <- this.toList) if (!other.contains(el)) includes = false
+    includes
+  }
   
   override def toString = "{" ++ (toList mkString ", ") ++ "}"
   
