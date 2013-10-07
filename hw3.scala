@@ -141,23 +141,29 @@ class MapSet[T] private (m: Map[T, Unit]) extends FinSet[T] {
       case (x, _) :: t => project(t, x :: l2)
     }
   
-  val toList =  
-    List[T]() // replace this line with your implementation
+  val toList =  elems.keys.toList
    
-  def +(x:T) =  
-    this // replace this line with your implementation
+  def +(x:T) = new MapSet[T](elems + (x -> ()))
     
-  def U(other:FinSet[T]) =  
-    this // replace this line with your implementation
+  def U(other:FinSet[T]) = {
+    var newMap = elems
+    for (e <- other.toList) newMap = newMap + (e -> ())
+    new MapSet[T](newMap)
+  }
   
-  def ^(other:FinSet[T]) =  
-    this // replace this line with your implementation
+  def ^(other:FinSet[T]) = {
+    var newMap = Map[T, Unit]()
+    for (e <- other.toList) if (elems contains e) newMap = newMap + (e -> ())
+    new MapSet[T](newMap)
+  }
       
-  def \(other:FinSet[T]) =  
-    this // replace this line with your implementation
+  def \(other:FinSet[T]) =  {
+    var newMap = Map[T, Unit]()
+    for (e <- elems.keys) if (!other.contains(e)) newMap = newMap + (e -> ())
+    new MapSet[T](newMap)
+  }
 
-  def contains(x:T) =  
-    false // replace this line with your implementation
+  def contains(x:T) = elems contains x
 }
 
 
